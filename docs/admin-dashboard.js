@@ -56,7 +56,7 @@ onAuthStateChanged(auth, async (user) => {
     try {
         const token = await user.getIdToken();
 
-        const verify = await fetch("/hobby-api/admin/verify", {
+        const verify = await fetch("https://e-commerce-zrdv.onrender.com/hobby-api/admin/verify", {
             headers: { "X-Firebase-Auth": `Bearer ${token}` }
         });
 

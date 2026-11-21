@@ -129,7 +129,7 @@ function showAdminLogin(){
 }
 async function verifyAdminAccount(user){
  const token=await user.getIdToken(true);
- const response=await fetch('/hobby-api/admin/verify',{headers:{'X-Firebase-Auth':`Bearer ${token}`}});
+ const response=await fetch('https://e-commerce-zrdv.onrender.com/hobby-api/admin/verify',{headers:{'X-Firebase-Auth':`Bearer ${token}`}});
  const data=await response.json().catch(()=>({}));
  if(!response.ok)throw new Error(data.error||`Admin verification failed (${response.status})`);
  return data;
