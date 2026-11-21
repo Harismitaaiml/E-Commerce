@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>HobbyHub — Find Your Passion</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="#"><span class="brand-icon">H</span> HobbyHub</a>
+  <nav><a href="#shop">Explore</a><a href="#orders">My orders</a></nav>
+  <div class="top-actions"><span id="user-label" class="muted"></span><button id="auth-open" class="btn btn-dark">Sign in</button><button id="logout" class="btn btn-outline hidden">Sign out</button><button id="cart-open" class="btn btn-outline">Cart <b id="cart-count">0</b></button></div>
+</header>
+<main>
+<section class="hero"><div><p class="eyebrow">A marketplace for what moves you</p><h1>Your free time<br><em>deserves more.</em></h1><p>Find the gear, tools and inspiration for the things you love doing.</p><a class="btn btn-lime" href="#shop">Explore your interests ↗</a></div><div class="hero-art">🎨　🎮<br>📷　🎸</div></section>
+<section class="section" id="shop">
+  <div class="section-head"><div><p class="eyebrow">Find your thing</p><h2>Explore by hobby</h2></div></div>
+  <div id="categories" class="category-grid"></div>
+  <div class="section-head products-heading"><div><p class="eyebrow">Picked for curious minds</p><h2>Featured products</h2></div><div class="filters"><input id="search" type="search" placeholder="Search products…"><select id="filter"><option value="">All hobbies</option></select><select id="sort"><option value="featured">Featured</option><option value="low">Price: low to high</option><option value="high">Price: high to low</option></select></div></div>
+  <p id="status" class="muted" aria-live="polite">Connecting to HobbyHub catalogue…</p><div id="products" class="product-grid"></div>
+</section>
+<section class="banner"><div><p class="eyebrow">Try something new</p><h2>One small curiosity can become a lifelong passion.</h2></div><a class="btn btn-dark" href="#shop">Discover hobbies ↗</a></section>
+<section class="section" id="orders"><p class="eyebrow">Your purchases</p><h2>Order history</h2><div id="order-list" class="panel">Sign in to view your orders.</div></section>
+</main>
+<footer><a class="brand" href="#"><span class="brand-icon">H</span> HobbyHub</a><span>Find Your Passion. Discover Your Gear.</span></footer>
+<div id="overlay" class="overlay hidden"><section class="dialog" role="dialog" aria-modal="true"><button class="close" id="close">×</button><div id="modal-body"></div></section></div>
+<div id="toast" class="toast" role="status"></div>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script type="module" src="js/app.js"></script>
+</body></html>
