@@ -50,7 +50,7 @@ form.addEventListener("submit", async (event) => {
 
         sessionStorage.setItem("adminToken", token);
 
-        window.location.href = "/admin-dashboard.html";
+        window.location.href = "./admin-dashboard.html";
 
     } catch (error) {
         message.textContent = error.message;
