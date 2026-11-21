@@ -70,6 +70,19 @@ async function loadProducts(){
   $('#products').html('<div class="panel">The website is running, but it cannot read the Firestore catalogue yet. Review the setup guide in README.md.</div>');
  }
 }
+function getProductImage(product){
+ const supplied = product.imageUrl || product.image || product.image_url || product.photoURL;
+ if (typeof supplied === 'string' && supplied.trim()) return supplied.trim();
+ const category = String(product.category || '').toLowerCase();
+ const categoryFiles = [
+  ['art','art-painting'],['painting','art-painting'],['gaming','gaming'],
+  ['photo','photography'],['music','music'],['fitness','fitness'],
+  ['craft','diy-crafts'],['diy','diy-crafts'],['garden','gardening'],
+  ['read','reading']
+ ];
+ const match = categoryFiles.find(([word]) => category.includes(word));
+ return `/images/products/${match ? match[1] : 'hobbyhub-default'}.svg`;
+}
 function renderProducts(){
  let list=[...productsCache];
  if(filter)list=list.filter(p=>p.category===filter);
@@ -78,7 +91,10 @@ function renderProducts(){
  if(sort==='high')list.sort((a,b)=>b.pricePaise-a.pricePaise);
  const box=$('#products').empty();
  if(!list.length){box.html('<div class="panel">No products match your search.</div>');return}
- list.forEach(p=>box.append(`<article class="product-card"><div class="product-art"><span class="stock">${Number(p.qty)>0?'IN STOCK':'SOLD OUT'}</span>${esc(p.icon||'✦')}</div><div class="product-info"><small>${esc(p.category)}</small><h3>${esc(p.title)}</h3><p>${esc(p.description)}</p><div class="product-bottom"><strong>${money(p.pricePaise)}</strong><button class="btn btn-dark" data-add="${esc(p.id)}" ${Number(p.qty)<1?'disabled':''}>${Number(p.qty)<1?'Sold out':'Add to cart'}</button></div></div></article>`));
+ list.forEach(p=>{
+  const imageSrc = getProductImage(p);
+  box.append(`<article class="product-card"><div class="product-art"><img src="${esc(imageSrc)}" alt="${esc(p.title)}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='grid'"><span class="image-fallback" style="display:none">${esc(p.icon||'✦')}</span><span class="stock">${Number(p.qty)>0?'IN STOCK':'SOLD OUT'}</span></div><div class="product-info"><small>${esc(p.category)}</small><h3>${esc(p.title)}</h3><p>${esc(p.description)}</p><div class="product-bottom"><strong>${money(p.pricePaise)}</strong><button class="btn btn-dark" data-add="${esc(p.id)}" ${Number(p.qty)<1?'disabled':''}>${Number(p.qty)<1?'Sold out':'Add to cart'}</button></div></div></article>`);
+ });
 }
 function addToCart(id){
  const p=productsCache.find(x=>x.id===id);if(!p)return;
@@ -99,8 +115,25 @@ function updateCart(action,id){
  if(action==='plus'){if(!p||item.qty>=Number(p.qty))return toast('Stock limit reached.');item.qty++;saveCart(c)}
  renderCart();
 }
-function showLogin(){showModal(`<p class="eyebrow">HobbyHub account</p><h2>Sign in</h2><form id="login-form"><label>Email<input id="login-email" type="email" required></label><label>Password<input id="login-password" type="password" required></label><button class="btn btn-dark">Sign in</button><p id="auth-error" class="muted"></p></form><p class="muted">New customer? <button id="show-signup" class="text-link">Create account</button></p><p class="muted">Demo login remains browser-local; it is not Firebase Authentication.</p>`)}
+function showLogin(){showModal(`<p class="eyebrow">HobbyHub account</p><h2>Sign in</h2><form id="login-form"><label>Email<input id="login-email" type="email" required></label><label>Password<input id="login-password" type="password" required></label><button class="btn btn-dark">Sign in</button><p id="auth-error" class="muted"></p></form><p class="muted">New customer? <button id="show-signup" class="text-link">Create account</button></p><hr><p class="muted">Administrator?</p><button id="show-admin-login" class="btn btn-outline" type="button">Admin Login</button>`)}
 function showSignup(){showModal(`<p class="eyebrow">Join HobbyHub</p><h2>Create account</h2><form id="signup-form"><label>Name<input id="new-name" required></label><label>Email<input id="new-email" type="email" required></label><label>Password<input id="new-password" type="password" minlength="6" required></label><label>Confirm password<input id="confirm-password" type="password" required></label><button class="btn btn-dark">Create account</button><p id="auth-error" class="muted"></p></form><p class="muted">Already registered? <button id="show-login" class="text-link">Sign in</button></p>`)}
+function showAdminLogin(){
+ showModal(`<p class="eyebrow">HobbyHub Admin Portal</p><h2>Administrator sign in</h2>
+ <form id="admin-login-form">
+  <label>Email<input id="admin-email" type="email" required autocomplete="username"></label>
+  <label>Password<input id="admin-password" type="password" required autocomplete="current-password"></label>
+  <button class="btn btn-dark" type="submit">Access Admin Dashboard</button>
+  <p id="admin-error" class="muted" role="alert"></p>
+ </form>
+ <p class="muted"><button id="back-to-customer-login" class="text-link" type="button">Back to customer sign in</button></p>`);
+}
+async function verifyAdminAccount(user){
+ const token=await user.getIdToken(true);
+ const response=await fetch('/hobby-api/admin/verify',{headers:{'X-Firebase-Auth':`Bearer ${token}`}});
+ const data=await response.json().catch(()=>({}));
+ if(!response.ok)throw new Error(data.error||`Admin verification failed (${response.status})`);
+ return data;
+}
 function updateHeader(){
  const u=currentUser();
  $('#auth-open').toggleClass('hidden',!!u);
@@ -204,6 +237,24 @@ $(function(){
  $('#filter').on('change',function(){filter=this.value;renderProducts()});$('#search').on('input',function(){query=this.value.toLowerCase().trim();renderProducts()});$('#sort').on('change',function(){sort=this.value;renderProducts()});
  $('#products').on('click','[data-add]',function(){addToCart($(this).data('add'))});
  $('#modal-body').on('click','#show-signup',showSignup).on('click','#show-login',showLogin);
+ $('#modal-body').on('click','#show-admin-login',showAdminLogin)
+  .on('click','#back-to-customer-login',showLogin);
+ $('#modal-body').on('submit','#admin-login-form',async function(e){
+  e.preventDefault();
+  const button=$(this).find('button[type="submit"]');
+  button.prop('disabled',true).text('Verifying administrator...');
+  $('#admin-error').text('');
+  try{
+   const credential=await signInWithEmailAndPassword(auth,$('#admin-email').val().trim().toLowerCase(),$('#admin-password').val());
+   await verifyAdminAccount(credential.user);
+   sessionStorage.setItem('adminToken','verified');
+   window.location.href='/admin-dashboard.html';
+  }catch(err){
+   $('#admin-error').text(err.message||'Admin sign-in failed.');
+   if(auth.currentUser) await signOut(auth);
+   button.prop('disabled',false).text('Access Admin Dashboard');
+  }
+ });
  $('#modal-body').on('submit','#signup-form',async function(e){
    e.preventDefault();
    const name=$('#new-name').val().trim();

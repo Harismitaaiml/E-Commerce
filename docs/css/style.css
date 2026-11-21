@@ -15,3 +15,9 @@ a{color:inherit;text-decoration:none}button,input,select{font:inherit}.hidden{di
 footer{background:var(--dark);color:white;padding:30px 7vw;display:flex;justify-content:space-between;align-items:center}footer span{font-size:.82rem;color:#b4beb6}
 @media(max-width:900px){.product-grid{grid-template-columns:repeat(2,1fr)}.hero{grid-template-columns:1fr}.hero-art{display:none}.category-grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:600px){.topbar{padding:0 4vw}.topbar nav{display:none}.top-actions{gap:6px}.top-actions .muted{display:none}.section{padding:48px 5vw}.section-head{align-items:start;flex-direction:column}.filters{width:100%}.filters input{width:100%}.filters select{flex:1}.product-grid{grid-template-columns:1fr 1fr;gap:9px}.product-art{height:120px}.product-info{padding:11px}.product-bottom{align-items:start;flex-direction:column}.banner{margin:0 5vw 40px;display:block}.banner .btn{margin-top:18px}footer{flex-direction:column;align-items:start;gap:12px}}
+
+/* Local product artwork: bundled with the site, so no Firebase Storage or billing is needed. */
+.product-art{overflow:hidden}
+.product-art img{width:100%;height:100%;object-fit:cover;display:block}
+.product-art .stock{z-index:1}
+.image-fallback{position:absolute;inset:0;place-items:center;font-size:3.8rem;background:#e9eedf}

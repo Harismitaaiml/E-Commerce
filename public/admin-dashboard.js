@@ -274,12 +274,12 @@ form.addEventListener("submit", async event => {
     const price = Number(document.getElementById("productPrice").value);
 
     const product = {
-        productId: document.getElementById("productId").value.trim(),
-        name: document.getElementById("productName").value.trim(),
+        id: document.getElementById("productId").value.trim(),
+        title: document.getElementById("productName").value.trim(),
         category: document.getElementById("productCategory").value.trim(),
         description: document.getElementById("productDescription").value.trim(),
         pricePaise: Math.round(price * 100),
-        stock: Number(document.getElementById("productStock").value),
+        qty: Number(document.getElementById("productStock").value),
         imageUrl: document.getElementById("productImage").value.trim()
     };
 
