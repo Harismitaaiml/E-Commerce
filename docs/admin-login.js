@@ -35,6 +35,8 @@ form.addEventListener("submit", async (event) => {
         );
 
         const token = await credential.user.getIdToken();
+        console.log("Firebase login successful");
+        console.log("Token generated:", !!token);
 
         // Ask backend to verify the admin role.
         const response = await fetch("https://e-commerce-zrdv.onrender.com/hobby-api/admin/verify", {
@@ -42,6 +44,8 @@ form.addEventListener("submit", async (event) => {
                 "X-Firebase-Auth": `Bearer ${token}`
             }
         });
+
+        console.log("Render response:", response.status);
 
         if (!response.ok) {
             await signOut(auth);
