@@ -26,7 +26,7 @@ app.use(helmet({
 app.use(cors({origin:process.env.CORS_ORIGIN?process.env.CORS_ORIGIN.split(","):true}));
 app.use(express.json({limit:"1mb"}));
 app.use(express.static("public"));
-app.get("/hobby-api/health",async(_req,res)=>{try{await db.collection("products").limit(1).get();res.json({ok:true,service:"hobbyhub-api",firestore:"connected"});}catch(e){res.status(503).json({ok:false,error:"Firestore unavailable"});}});
+app.get("/hobby-api/health", async (_req, res) => { try { await db.collection("products").limit(1).get(); return res.json({ok:true,service:"hobbyhub-api",firestore:"connected"}); } catch(e) { console.error("Firestore health check failed:",e); return res.status(503).json({ok:false,service:"hobbyhub-api",firestore:"disconnected",error:e.message}); } });
 app.use("/hobby-api/admin", require("./routes/adminRoutes"));
 app.use("/hobby-api/products",require("./routes/productRoutes"));
 app.use("/hobby-api/customers",require("./routes/customerRoutes"));
