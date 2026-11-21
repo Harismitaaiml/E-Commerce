@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HobbyHub | Admin Dashboard</title>
+<link rel="stylesheet" href="/admin.css">
+</head>
+<body>
+
+<div class="admin-layout">
+
+    <aside class="sidebar">
+        <div class="brand">Hobby<span>Hub</span></div>
+        <p class="sidebar-label">ADMIN PANEL</p>
+
+        <button class="nav-item active" data-section="overview">📊 Overview</button>
+        <button class="nav-item" data-section="products">📦 Products</button>
+        <button class="nav-item" data-section="orders">🛒 Orders</button>
+        <button class="nav-item" data-section="customers">👥 Customers</button>
+
+        <div class="sidebar-bottom">
+            <a href="/">← View Store</a>
+            <button id="logoutBtn" class="logout-btn">↪ Logout</button>
+        </div>
+    </aside>
+
+    <main class="main-content">
+
+        <header class="topbar">
+            <div>
+                <h2 id="pageTitle">Dashboard Overview</h2>
+                <p class="muted">Manage your HobbyHub store</p>
+            </div>
+
+            <div class="admin-profile">
+                <div class="avatar">A</div>
+                <div>
+                    <strong>Administrator</strong>
+                    <small id="adminEmail">Loading...</small>
+                </div>
+            </div>
+        </header>
+
+        <!-- OVERVIEW -->
+
+        <section id="overview" class="content-section active">
+
+            <div class="welcome-banner">
+                <div>
+                    <h2>Welcome to HobbyHub 👋</h2>
+                    <p>Manage products, inventory and store operations.</p>
+                </div>
+                <span>HH</span>
+            </div>
+
+            <div class="stats-grid">
+
+                <div class="stat-card">
+                    <p>Total Products</p>
+                    <h2 id="totalProducts">0</h2>
+                    <span>Products in catalogue</span>
+                </div>
+
+                <div class="stat-card">
+                    <p>Total Orders</p>
+                    <h2 id="totalOrders">—</h2>
+                    <span>Requires order API</span>
+                </div>
+
+                <div class="stat-card">
+                    <p>Total Customers</p>
+                    <h2 id="totalCustomers">—</h2>
+                    <span>Requires customer API</span>
+                </div>
+
+                <div class="stat-card">
+                    <p>Low Stock Items</p>
+                    <h2 id="lowStock">0</h2>
+                    <span>Products with stock below 10</span>
+                </div>
+
+            </div>
+
+            <div class="panel">
+                <div class="panel-heading">
+                    <h3>Recent Products</h3>
+                    <button class="primary-btn" data-goto="products">Manage Products</button>
+                </div>
+                <div id="recentProducts" class="table-wrapper">
+                    Loading products...
+                </div>
+            </div>
+
+        </section>
+
+        <!-- PRODUCTS -->
+
+        <section id="products" class="content-section">
+
+            <div class="panel">
+                <div class="panel-heading">
+                    <div>
+                        <h3>Product Management</h3>
+                        <p class="muted">Add, edit and manage store products.</p>
+                    </div>
+                    <button class="primary-btn" id="addProductBtn">+ Add Product</button>
+                </div>
+
+                <input type="search" id="productSearch"
+                       placeholder="Search products..." class="search-box">
+
+                <div id="productTable" class="table-wrapper">
+                    Loading products...
+                </div>
+            </div>
+
+        </section>
+
+        <!-- ORDERS -->
+
+        <section id="orders" class="content-section">
+    <div class="panel">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+            <h3>Order Management</h3>
+            <button type="button" class="action-btn" id="refreshOrdersBtn">Refresh Orders</button>
+        </div>
+        <p class="muted">View customer orders and update their delivery status.</p>
+        <p id="orderMessage" class="muted">Loading orders...</p>
+        <div id="orderTable"></div>
+    </div>
+</section>
+
+        <!-- CUSTOMERS -->
+
+        <section id="customers" class="content-section">
+
+            <div class="panel">
+                <h3>Customer Management</h3>
+                <p class="muted">
+                    Customer profiles will be displayed here after the
+                    protected admin customer-list API is implemented.
+                </p>
+                <div class="empty-state">
+                    <div>👥</div>
+                    <h3>Customer Management</h3>
+                    <p>Backend customer management API integration pending.</p>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+<!-- PRODUCT MODAL -->
+
+<div class="modal" id="productModal">
+    <div class="modal-card">
+
+        <div class="modal-heading">
+            <h2 id="modalTitle">Add Product</h2>
+            <button id="closeModal" class="close-btn">×</button>
+        </div>
+
+        <form id="productForm">
+
+            <label>Product ID</label>
+            <input id="productId" required placeholder="Example: P013">
+
+            <label>Product Name</label>
+            <input id="productName" required placeholder="Product name">
+
+            <label>Category</label>
+            <input id="productCategory" required placeholder="Art, Music, Sports...">
+
+            <label>Description</label>
+            <textarea id="productDescription" required></textarea>
+
+            <label>Price (INR)</label>
+            <input type="number" id="productPrice" min="0.01" step="0.01" required>
+
+            <label>Stock Quantity</label>
+            <input type="number" id="productStock" min="0" required>
+
+            <label>Image URL</label>
+            <input type="url" id="productImage" placeholder="https://...">
+
+            <button type="submit" class="primary-btn" id="saveProductBtn">
+                Save Product
+            </button>
+
+            <p id="productMessage"></p>
+
+        </form>
+
+    </div>
+</div>
+
+<script type="module" src="/admin-dashboard.js"></script>
+</body>
+</html>
