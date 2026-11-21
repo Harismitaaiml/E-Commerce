@@ -248,7 +248,7 @@ $(function(){
    const credential=await signInWithEmailAndPassword(auth,$('#admin-email').val().trim().toLowerCase(),$('#admin-password').val());
    await verifyAdminAccount(credential.user);
    sessionStorage.setItem('adminToken','verified');
-   window.location.href='/admin-dashboard.html';
+   window.location.href='./admin-dashboard.html';
   }catch(err){
    $('#admin-error').text(err.message||'Admin sign-in failed.');
    if(auth.currentUser) await signOut(auth);
