@@ -116,7 +116,7 @@ function showSection(section) {
 
 async function loadProducts() {
     try {
-        const data = await fetch("/hobby-api/products").then(response => {
+        const data = await fetch("https://e-commerce-zrdv.onrender.com/hobby-api/products").then(response => {
             if (!response.ok) throw new Error("Could not load products");
             return response.json();
         });
@@ -290,7 +290,7 @@ form.addEventListener("submit", async event => {
                 body: JSON.stringify(product)
             });
         } else {
-            await api("/hobby-api/products", {
+            await api("https://e-commerce-zrdv.onrender.com/hobby-api/products", {
                 method: "POST",
                 body: JSON.stringify(product)
             });
@@ -357,7 +357,7 @@ async function loadOrders() {
     box.innerHTML = "";
 
     try {
-        const data = await api("/hobby-api/orders");
+        const data = await api("https://e-commerce-zrdv.onrender.com/hobby-api/orders");
         const orders = data.orders || [];
 
         message.textContent = `${orders.length} order(s) found.`;

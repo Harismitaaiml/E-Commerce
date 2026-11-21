@@ -5,7 +5,7 @@ async function loadProducts() {
   const message = document.getElementById("message");
 
   try {
-    const response = await fetch("/hobby-api/products");
+    const response = await fetch("https://e-commerce-zrdv.onrender.com/hobby-api/products");
     if (!response.ok) throw new Error("API returned HTTP " + response.status);
 
     const data = await response.json();

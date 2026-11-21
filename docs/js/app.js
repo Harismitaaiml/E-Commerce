@@ -149,7 +149,7 @@ async function renderOrders(){
  box.text('Loading your orders...');
  try{
   const token=await authUser.getIdToken();
-  const response=await fetch('/hobby-api/orders/mine',{
+  const response=await fetch('https://e-commerce-zrdv.onrender.com/hobby-api/orders/mine',{
    headers:{'X-Firebase-Auth':`Bearer ${token}`}
   });
   const data=await response.json().catch(()=>({}));
@@ -207,7 +207,7 @@ async function placeOrder(){
  };
  try{
   const token = await authUser.getIdToken();
-   const response=await fetch('/hobby-api/orders',{
+   const response=await fetch('https://e-commerce-zrdv.onrender.com/hobby-api/orders',{
     method:'POST',
     headers:{
      'Content-Type':'application/json',
